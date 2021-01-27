@@ -1,1 +1,1 @@
-# CAP4786_Superbowl_Predictions
+# CAP4786 Superbowl Predictions
