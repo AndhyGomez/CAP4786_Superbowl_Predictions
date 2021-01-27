@@ -1,0 +1,108 @@
+---
+title: "SuperBowl Predictions"
+author: "Andhy Gomez"
+date: "1/27/2021"
+output: html_document
+---
+
+# Load libraries
+```{r}
+# Load the tidyverse
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+superbowl <- read.csv("superbowl.csv")
+
+superbowl$Date = as.Date(superbowl$Date, "%b %d %Y")
+
+superbowl = superbowl[order(superbowl$Date),]
+
+head(superbowl)
+```
+
+```{r}
+superbowl$Winner <- as.factor(superbowl$Winner)
+superbowl$Loser <- as.factor(superbowl$Loser)
+```
+
+```{r}
+summary(superbowl)
+```
+
+
+```{r}
+ggplot(data = superbowl, aes(Winner)) + 
+  stat_count(show.legend = FALSE, aes(color = Winner, fill = Winner)) +
+  labs(title = "Superbowl Wins",
+       subtitle = "1967 - 2020",
+       x = "Team",
+       y = "Wins",
+       caption = "Source: Kaggle") +
+  coord_flip() +
+  theme(panel.background = element_blank())
+```
+```{r}
+ggplot(data = superbowl, aes(Loser)) + 
+  stat_count(show.legend = FALSE, aes(color = Loser, fill = Loser)) +
+  labs(title = "Superbowl Losses",
+       subtitle = "1967 - 2020",
+       x = "Team",
+       y = "Losses",
+       caption = "Source: Kaggle") +
+  coord_flip() +
+  theme(panel.background = element_blank())
+```
+
+Objectively speaking, the Kansas City Chiefs have both won more and participated in more total superbowls than the Tampa Bay Bucaneers, That extra experience
+as an organization could lead to the Chiefs taking home the championship this year.
+
+
+```{r}
+ggplot(data = superbowl, aes(x = Date)) +
+  geom_line(aes(y = Winner.Pts), color = "royalblue3") +
+  geom_line(linetype = "dashed", aes(y = Loser.Pts), color = "firebrick4") +
+  theme(panel.background = element_blank()) +
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid")) +
+  labs(title = "Winners Vs. Losers",
+       subtitle = "Superbowl Performances since 1967",
+       x = "",
+       y = "Points Scored",
+       caption = "Blue = Winners
+                  Red = Losers")
+```
+```{r}
+mean(superbowl$Winner.Pts)
+mean(superbowl$Loser.Pts)
+```
+
+On average, the winning team will score 30. The losing team on the other hand generally scores around 16. It stands to reason that the team who has a higher 
+score average over the season will likely win. Once again, the Kansas City Chiefs seem to be the favorites.
+
+
+```{r}
+superbowlmvps <- read.csv("mvpsb.csv")
+superbowlmvps$POSITION <- as.factor(superbowlmvps$POSITION)
+head(superbowlmvps)
+```
+
+```{r}
+ggplot(data.frame(superbowlmvps), aes(x = POSITION)) +
+  geom_bar(show.legend = FALSE, aes(fill = TEAM)) +
+  theme(panel.background = element_blank()) +
+  theme( axis.line = element_line(colour = "black", 
+                      size = 1, linetype = "solid")) +
+  labs(title = "Superbowl MVP Winners by Position",
+       subtitle = "1967 - 2020",
+       x = "Position",
+       y = "MVP Count")
+  
+```
+
+Since 1967, it can be clearly seen that a staggering number of times the Quarterback is declared the MVP of the superbowl, sitting at upwards of 30 QB 
+MVP's with the next most being wide receivers which are under 10. Therefore it should not be a stretch to say the team with the better QB will win. 
+Although the Buccaneers have a very prolific and historically good QB in Tom Brady, the Chiefs QB Patrick Mahomes is nothing short of a generational talent 
+himself, having even won and took home the Championship and MVP honors the prior season. All in all, my favorites to win this years superbowl are the Kansas 
+City Chiefs.
